@@ -1,18 +1,15 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.Year;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +22,6 @@ public class ImageCreator {
     private static final String yAxis = "";
 
     public void create(Team team) {
-        createXYChart(team);
         createTimeChart(team);
     }
 
@@ -50,42 +46,16 @@ public class ImageCreator {
                 false,                      // Use tooltips
                 false                       // Configure chart to generate URLs?
         );
+        XYPlot plot = (XYPlot) chart.getPlot();
+        for (int i = 0; i < dataset.getSeriesCount(); i++)
+            plot.getRenderer().setSeriesPaint(i, Color.RED);
+        plot.getRangeAxis().setInverted(true);
+
         try {
             ChartUtilities.saveChartAsJPEG(new File("time" + team.getName() + ".jpg"), chart, 500, 300);
         } catch (IOException e) {
             System.err.println("Problem occurred creating chart.");
         }
     }
-
-    private void createXYChart(Team team) {
-        XYSeriesCollection dataset = new XYSeriesCollection();
-
-        for (Map line : team.getData()) {
-            XYSeries series = new XYSeries(line.toString());
-            Iterator i = line.entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry<Integer, Integer> pair = (Map.Entry) i.next();
-                series.add(pair.getKey(), pair.getValue());
-            }
-            dataset.addSeries(series);
-        }
-
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                team.getName(),
-                xAxis,
-                yAxis,
-                dataset,
-                PlotOrientation.VERTICAL,   // Plot Orientation
-                false,                      // Show Legend
-                false,                      // Use tooltips
-                false                       // Configure chart to generate URLs?
-        );
-        try {
-            ChartUtilities.saveChartAsJPEG(new File("xy" + team.getName() + ".jpg"), chart, 500, 300);
-        } catch (IOException e) {
-            System.err.println("Problem occurred creating chart.");
-        }
-    }
-
 }
 
