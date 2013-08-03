@@ -7,11 +7,19 @@ import java.util.List;
  * Date: 29.07.13
  * Time: 0:06
  */
-public class LeagueStructure {
+public class LeagueStructure
+{
     private int divisionCount;
+
+    public List<Integer> getDivisionTeamsCount()
+    {
+        return divisionTeamsCount;
+    }
+
     List<Integer> divisionTeamsCount;
 
-    public LeagueStructure(List<Integer> divisionTeamsCount) {
+    public LeagueStructure(List<Integer> divisionTeamsCount)
+    {
         this.divisionTeamsCount = divisionTeamsCount;
         this.divisionCount = divisionTeamsCount.size();
     }
@@ -23,7 +31,8 @@ public class LeagueStructure {
      * @param position         position in division (1 - winner)
      * @return global position (1 - global winner)
      */
-    public int getPosition(int divisionPosition, int position) {
+    public int getPosition(int divisionPosition, int position)
+    {
         divisionPosition--;
 
         if (divisionCount < divisionPosition)
