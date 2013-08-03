@@ -3,6 +3,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
@@ -27,8 +28,10 @@ public class ImageCreator {
     private static final String yAxis = "";
     private static final Color mainColor = Color.RED;
     private static final Shape dotShape = new Rectangle2D.Double(-3, -3, 6, 6);
+    private String name;
 
-    public void create(Team team) {
+    public void create(Team team, String name) {
+        this.name = name;
         createTimeChart(team);
     }
 
@@ -45,7 +48,7 @@ public class ImageCreator {
             dataset.addSeries(series);
         }
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                team.getName(),
+                name,
                 xAxis,
                 yAxis,
                 dataset,
@@ -55,8 +58,11 @@ public class ImageCreator {
         );
         XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
-        DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setTickUnit(new DateTickUnit(DateTickUnit.YEAR, 1, new SimpleDateFormat("yyyy")));
+        ValueAxis valueAxis = plot.getRangeAxis();
+        valueAxis.setAutoTickUnitSelection(false);
+        valueAxis.setRange(0.5, 16);
+        DateAxis dateAxis = (DateAxis) plot.getDomainAxis();
+        dateAxis.setTickUnit(new DateTickUnit(DateTickUnit.YEAR, 1, new SimpleDateFormat("yyyy")));
         plot.getDomainAxis().setVerticalTickLabels(true);
         plot.getRangeAxis().setInverted(true);
 
@@ -67,7 +73,7 @@ public class ImageCreator {
         }
 
         try {
-            ChartUtilities.saveChartAsJPEG(new File("time" + team.getName() + ".jpg"), chart, 500, 300);
+            ChartUtilities.saveChartAsJPEG(new File(name + ".jpg"), chart, 500, 300);
         } catch (IOException e) {
             System.err.println("Problem occurred creating chart.");
         }

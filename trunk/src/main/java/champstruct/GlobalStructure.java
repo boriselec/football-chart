@@ -1,5 +1,6 @@
 package champstruct;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -9,6 +10,17 @@ import java.util.Map;
  */
 public class GlobalStructure {
     Map<Integer, LeagueStructure> yearToLeague;
+
+    public GlobalStructure(Map<Integer, LeagueStructure> yearToLeague) {
+        //rpl stub
+        ArrayList<Integer> divisionTeamsCount = new ArrayList<Integer>();
+        divisionTeamsCount.add(new Integer(16));
+        LeagueStructure leagueStructure = new LeagueStructure(divisionTeamsCount);
+        for (int i = 1992; i <= 2013; i++)
+            yearToLeague.put(i, leagueStructure);
+        this.yearToLeague = yearToLeague;
+//        this.yearToLeague = yearToLeague;
+    }
 
     /**
      * get global team position in whole league structure
