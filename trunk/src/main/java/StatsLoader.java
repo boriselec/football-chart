@@ -14,25 +14,38 @@ import java.util.regex.Pattern;
  * Date: 03.08.13
  * Time: 17:57
  */
-public class StatsLoader {
+public class StatsLoader
+{
     private static final String LINE_REGEX = "(\\d{4}) (\\d+) (\\d+)";
     private static final Pattern LINE_PATTERN = Pattern.compile(LINE_REGEX);
+    private static final String LEAGUE_LINE_REGEX = "(\\d{4})( \\d+)+";
+    private static final Pattern LEAGUE_LINE_PATTERN = Pattern.compile(LEAGUE_LINE_REGEX);
 
-    private GlobalStructure globalStructure = new GlobalStructure(new HashMap<Integer, LeagueStructure>());
+    private static final String STATS_PATH = "/stats/";
+    private static final String TEAMS_PATH = "/teams/";
+    private static final String STRUCTURE_PATH = "/structure.txt";
+    private static final String CURRENT_PATH = System.getProperty("user.dir");
 
-    public List<Team> load(File folderName) throws IOException {
+    private GlobalStructure globalStructure;// = new champstruct.GlobalStructure(new HashMap<Integer, LeagueStructure>());
+
+    public List<Team> loadTeamsStats(String league, GlobalStructure globalStructure) throws IOException
+    {
+        File folderName = new File(CURRENT_PATH + STATS_PATH + league + TEAMS_PATH);
+        this.globalStructure = globalStructure;
         List<Team> teams = new ArrayList<Team>();
         if (!folderName.isDirectory())
             throw new IllegalArgumentException(folderName.getName() + " is not directory");
-        for (final File file : folderName.listFiles()) {
+        for (final File file : folderName.listFiles())
+        {
             if (file.isFile())
-                teams.add(parseStats(file));
+                teams.add(parseTeamStats(file));
         }
 
         return teams;
     }
 
-    private Team parseStats(File file) throws IOException {
+    private Team parseTeamStats(File file) throws IOException
+    {
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
 
@@ -46,7 +59,8 @@ public class StatsLoader {
         Map<Integer, Integer> rowData = new TreeMap<Integer, Integer>();
 
         String line;
-        while ((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null)
+        {
             Matcher matcher = LINE_PATTERN.matcher(line);
             if (!matcher.matches())
                 throw new IOException("wrong file format");
@@ -63,5 +77,56 @@ public class StatsLoader {
         //TODO: extract different lines
 
         return team;
+    }
+
+    public GlobalStructure loadLeagueStructure(String league) throws IOException
+    {
+        File file = new File(CURRENT_PATH + STATS_PATH + league + STRUCTURE_PATH);
+        if (!file.isFile())
+            throw new IllegalArgumentException("missing league structure file");
+
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        Integer divisionCount = Integer.parseInt(br.readLine());
+        Map<Integer, LeagueStructure> globalStructure = new HashMap<Integer, LeagueStructure>();
+        String line;
+        int yearCount = 0;
+        int minYear = 3000;
+        int maxYear = 0;
+        int positionCount = 0;
+        int maxDivision = 0;
+        while ((line = br.readLine()) != null)
+        {
+            Matcher matcher = LEAGUE_LINE_PATTERN.matcher(line);
+            if (!matcher.matches())
+                throw new IOException("wrong file format");
+
+            Integer year = Integer.parseInt(matcher.group(1));
+            yearCount++;
+            if (year > maxYear)
+                maxYear = year;
+            if (year < minYear)
+                minYear = year;
+
+            List<Integer> leagueTeamsCount = new ArrayList<Integer>(divisionCount);
+            String[] groups = line.split(" ");
+            for (int i = 1; i < groups.length; i++)
+            {
+                leagueTeamsCount.add(Integer.parseInt(groups[i]));
+                if (groups.length - 1 > maxDivision)
+                    maxDivision = groups.length - 1;
+            }
+
+            int sum = 0;
+            for (int i : leagueTeamsCount)
+                sum += i;
+            if (sum > positionCount)
+                positionCount = sum;
+
+            globalStructure.put(year, new LeagueStructure(leagueTeamsCount));
+            //TODO: merge LeagueStructure with same structure
+        }
+        return new GlobalStructure(league, globalStructure, minYear, maxYear, positionCount, maxDivision);
     }
 }

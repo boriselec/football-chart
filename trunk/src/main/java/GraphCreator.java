@@ -1,4 +1,5 @@
-import java.io.File;
+import champstruct.GlobalStructure;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -7,14 +8,22 @@ import java.util.List;
  * Date: 7/28/13
  * Time: 9:48 PM
  */
-public class GraphCreator {
-    public static void main(String... args) throws IOException {
+public class GraphCreator
+{
+
+    public static void main(String... args) throws IOException
+    {
+        final String league = "russia";
+
         StatsLoader loader = new StatsLoader();
-        String currentPath = System.getProperty("user.dir");
-        List<Team> teams = loader.load(new File(currentPath + "/stats/"));
+        GlobalStructure globalStructure = loader.loadLeagueStructure(league);
+        List<Team> teams = loader.loadTeamsStats(league, globalStructure);
+
+        BackgroudCreator backgroudCreator = new BackgroudCreator();
+        backgroudCreator.create(league, globalStructure);
 
         ImageCreator imageCreator = new ImageCreator();
         for (Team team : teams)
-            imageCreator.create(team, team.getEnName());
+            imageCreator.create(globalStructure, team, team.getEnName());
     }
 }
