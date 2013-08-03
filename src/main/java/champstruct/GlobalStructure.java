@@ -1,6 +1,5 @@
 package champstruct;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -8,18 +7,29 @@ import java.util.Map;
  * Date: 29.07.13
  * Time: 0:12
  */
-public class GlobalStructure {
+public class GlobalStructure
+{
+    private int minYear;
+    private int maxYear;
+    private int totalPositions;
+    private int maxDivision;
+    private String country;
+
+    public Map<Integer, LeagueStructure> getYearToLeague()
+    {
+        return yearToLeague;
+    }
+
     Map<Integer, LeagueStructure> yearToLeague;
 
-    public GlobalStructure(Map<Integer, LeagueStructure> yearToLeague) {
-        //rpl stub
-        ArrayList<Integer> divisionTeamsCount = new ArrayList<Integer>();
-        divisionTeamsCount.add(new Integer(16));
-        LeagueStructure leagueStructure = new LeagueStructure(divisionTeamsCount);
-        for (int i = 1992; i <= 2013; i++)
-            yearToLeague.put(i, leagueStructure);
+    public GlobalStructure(String country, Map<Integer, LeagueStructure> yearToLeague, int minYear, int maxYear, int positionCount, int maxDivision)
+    {
+        this.minYear = minYear;
+        this.maxYear = maxYear;
+        this.totalPositions = positionCount;
         this.yearToLeague = yearToLeague;
-//        this.yearToLeague = yearToLeague;
+        this.maxDivision = maxDivision;
+        this.country = country;
     }
 
     /**
@@ -30,7 +40,34 @@ public class GlobalStructure {
      * @param position         position in division (1 - winner)
      * @return global position (1 - global winner)
      */
-    public int getPosition(int year, int divisionPosition, int position) {
+    public int getPosition(int year, int divisionPosition, int position)
+    {
         return yearToLeague.get(year).getPosition(divisionPosition, position);
     }
+
+    public int getTotalPositions()
+    {
+        return totalPositions;
+    }
+
+    public int getMaxDivision()
+    {
+        return maxDivision;
+    }
+
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public int getMinYear()
+    {
+        return minYear;
+    }
+
+    public int getMaxYear()
+    {
+        return maxYear;
+    }
+
 }
