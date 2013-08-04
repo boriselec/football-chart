@@ -1,5 +1,8 @@
 import champstruct.GlobalStructure;
+import parsers.RussiaParser;
+import parsers.WebParser;
 
+import javax.script.ScriptException;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,9 +14,12 @@ import java.util.List;
 public class GraphCreator
 {
 
-    public static void main(String... args) throws IOException
+    public static void main(String... args) throws IOException, ScriptException
     {
         final String league = "russia";
+
+        WebParser parser = new RussiaParser();
+        parser.parse(1994, 2012);
 
         StatsLoader loader = new StatsLoader();
         GlobalStructure globalStructure = loader.loadLeagueStructure(league);

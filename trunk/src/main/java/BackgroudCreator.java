@@ -15,8 +15,7 @@ import java.util.List;
  */
 public class BackgroudCreator
 {
-    public static final String BACKGROUND = "/background/";
-    private static final String CURRENT_PATH = System.getProperty("user.dir");
+    public static final String BACKGROUND = "./background/";
     private static final double xSize = 500;
     private static final double ySize = 500;
     private static final double MAGIC_INDENT = 0.4;
@@ -59,7 +58,7 @@ public class BackgroudCreator
             x2 += xStep;
         }
         String format = "png";
-        ImageIO.write(img, format, new File(CURRENT_PATH + BACKGROUND + league + "." + format));
+        ImageIO.write(img, format, new File(BACKGROUND + league + "." + format));
 
     }
 
