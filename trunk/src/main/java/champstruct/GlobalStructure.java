@@ -42,6 +42,8 @@ public class GlobalStructure
      */
     public int getPosition(int year, int divisionPosition, int position)
     {
+        if (!yearToLeague.containsKey(year))
+            throw new IllegalArgumentException("Year " + year + " is not present in this league: " + country);
         return yearToLeague.get(year).getPosition(divisionPosition, position);
     }
 
@@ -70,4 +72,8 @@ public class GlobalStructure
         return maxYear;
     }
 
+    public int getTotalYears()
+    {
+        return maxYear - minYear;
+    }
 }

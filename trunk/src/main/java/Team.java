@@ -9,24 +9,30 @@ import java.util.Map;
  */
 public class Team
 {
-    private String rusName;
+    private String localName;
     private String enName;
     private List<Map<Integer, Integer>> data = new ArrayList();
 
-    public Team(String rusName, String enName)
+    public Team(String localName, String enName)
     {
-        this.rusName = rusName;
+        this.localName = localName;
         this.enName = enName;
     }
 
-    public String getRusName()
+    public String getLocalName()
     {
-        return rusName;
+        if (localName != null)
+            return localName;
+        else
+            return enName;
     }
 
     public String getEnName()
     {
-        return enName;
+        if (enName != null)
+            return enName;
+        else
+            return localName;
     }
 
     public List<Map<Integer, Integer>> getData()

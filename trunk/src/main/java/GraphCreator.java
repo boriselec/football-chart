@@ -24,6 +24,9 @@ public class GraphCreator
 
         ImageCreator imageCreator = new ImageCreator();
         for (Team team : teams)
+        {
+            imageCreator.create(globalStructure, team, team.getLocalName());
             imageCreator.create(globalStructure, team, team.getEnName());
+        }
     }
 }

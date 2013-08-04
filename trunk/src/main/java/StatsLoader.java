@@ -88,10 +88,8 @@ public class StatsLoader
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
 
-        Integer divisionCount = Integer.parseInt(br.readLine());
         Map<Integer, LeagueStructure> globalStructure = new HashMap<Integer, LeagueStructure>();
         String line;
-        int yearCount = 0;
         int minYear = 3000;
         int maxYear = 0;
         int positionCount = 0;
@@ -103,13 +101,12 @@ public class StatsLoader
                 throw new IOException("wrong file format");
 
             Integer year = Integer.parseInt(matcher.group(1));
-            yearCount++;
             if (year > maxYear)
                 maxYear = year;
             if (year < minYear)
                 minYear = year;
 
-            List<Integer> leagueTeamsCount = new ArrayList<Integer>(divisionCount);
+            List<Integer> leagueTeamsCount = new ArrayList<Integer>();
             String[] groups = line.split(" ");
             for (int i = 1; i < groups.length; i++)
             {

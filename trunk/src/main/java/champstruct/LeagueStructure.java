@@ -36,9 +36,10 @@ public class LeagueStructure
         divisionPosition--;
 
         if (divisionCount < divisionPosition)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Division " + divisionPosition + " is not present in league");
         if (divisionTeamsCount.get(divisionPosition) < position)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Position " + position + " is not present in division" + divisionPosition +
+                    ": " + divisionTeamsCount.get(position));
 
         int result = 0;
         for (int i = 0; i < divisionPosition; i++)
