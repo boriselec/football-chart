@@ -90,7 +90,7 @@ public class ImageCreator
             renderer.setSeriesShape(i, dotShape);
         }
 
-        ImageIcon image = new ImageIcon(System.getProperty("user.dir") + "/background/" + globalStructure.getCountry() + ".png");
+        ImageIcon image = new ImageIcon("./background/" + globalStructure.getCountry() + ".png");
         plot.setBackgroundImage(image.getImage());
         plot.setBackgroundImageAlignment(Align.FIT);
         plot.setBackgroundAlpha(0.1f);
@@ -98,7 +98,7 @@ public class ImageCreator
 
         try
         {
-            ChartUtilities.saveChartAsJPEG(new File(name + ".jpg"), chart, 25 * globalStructure.getTotalYears(),
+            ChartUtilities.saveChartAsPNG(new File(name + ".png"), chart, 25 * globalStructure.getTotalYears(),
                     15 * globalStructure.getTotalPositions());
         } catch (IOException e)
         {
