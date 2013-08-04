@@ -19,6 +19,7 @@ public class BackgroudCreator
     private static final String CURRENT_PATH = System.getProperty("user.dir");
     private static final double xSize = 500;
     private static final double ySize = 500;
+    private static final double MAGIC_INDENT = 0.4;
 
     private List<Color> colorList = new ArrayList<Color>();
 
@@ -29,20 +30,20 @@ public class BackgroudCreator
         img.createGraphics();
         Graphics2D g = (Graphics2D) img.getGraphics();
 
-        double xStep = xSize / (structure.getMaxYear() - structure.getMinYear() + 0.8);
+        double xStep = xSize / (structure.getMaxYear() - structure.getMinYear() + MAGIC_INDENT * 2);
         double yStep = ySize / (structure.getTotalPositions());
 
         for (int i = structure.getMinYear(); i <= structure.getMaxYear(); i++)
         {
-            double x1 = xStep * 0.4 + (i - structure.getMinYear()) * xStep;
+            double x1 = -xStep * MAGIC_INDENT / 4 + (i - structure.getMinYear()) * xStep;
             double x2 = x1 + xStep;
             if (i == structure.getMinYear())
                 x1 = 0;
 
             List<Integer> divisions = structure.getYearToLeague().get(i).getDivisionTeamsCount();
 
-            double y1 = 0;
-            double y2 = yStep / 2;
+            double y1;
+            double y2 = 0;//yStep / 2;
             for (int j = 0; j < divisions.size(); j++)
             {
                 y1 = y2;
@@ -66,8 +67,8 @@ public class BackgroudCreator
     {
         for (int i = 0; i < maxDivision; i++)
         {
-            int point = 255 * (i + 1) / (maxDivision + 1);
-            colorList.add(new Color(0, 0, point));
+            int depth = 100 + i * 155 / maxDivision;
+            colorList.add(new Color(depth, depth, 255));
         }
     }
 }
