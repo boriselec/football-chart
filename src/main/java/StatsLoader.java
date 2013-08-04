@@ -21,16 +21,15 @@ public class StatsLoader
     private static final String LEAGUE_LINE_REGEX = "(\\d{4})( \\d+)+";
     private static final Pattern LEAGUE_LINE_PATTERN = Pattern.compile(LEAGUE_LINE_REGEX);
 
-    private static final String STATS_PATH = "/stats/";
-    private static final String TEAMS_PATH = "/teams/";
+    private static final String STATS_PATH = "./stats/";
+    private static final String TEAMS_PATH = "./teams/";
     private static final String STRUCTURE_PATH = "/structure.txt";
-    private static final String CURRENT_PATH = System.getProperty("user.dir");
 
     private GlobalStructure globalStructure;// = new champstruct.GlobalStructure(new HashMap<Integer, LeagueStructure>());
 
     public List<Team> loadTeamsStats(String league, GlobalStructure globalStructure) throws IOException
     {
-        File folderName = new File(CURRENT_PATH + STATS_PATH + league + TEAMS_PATH);
+        File folderName = new File(STATS_PATH + league + TEAMS_PATH);
         this.globalStructure = globalStructure;
         List<Team> teams = new ArrayList<Team>();
         if (!folderName.isDirectory())
@@ -81,7 +80,7 @@ public class StatsLoader
 
     public GlobalStructure loadLeagueStructure(String league) throws IOException
     {
-        File file = new File(CURRENT_PATH + STATS_PATH + league + STRUCTURE_PATH);
+        File file = new File(STATS_PATH + league + STRUCTURE_PATH);
         if (!file.isFile())
             throw new IllegalArgumentException("missing league structure file");
 
